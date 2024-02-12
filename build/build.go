@@ -484,7 +484,7 @@ func toSolveOpt(ctx context.Context, node builder.Node, multiDriver bool, opt Op
 	case 1:
 		// valid
 	case 0:
-		if defaultLoad() || (nodeDriver.IsMobyDriver() && !noDefaultLoad()) {
+		if nodeDriver.IsMobyDriver() && !noDefaultLoad() {
 			// backwards compat for docker driver only:
 			// this ensures the build results in a docker image.
 			opt.Exports = []client.ExportEntry{{Type: "image", Attrs: map[string]string{}}}
@@ -1718,7 +1718,7 @@ func noDefaultLoad() bool {
 	return b
 }
 
-func defaultLoad() bool {
+func DefaultLoad() bool {
 	v, ok := os.LookupEnv("BUILDX_DEFAULT_LOAD")
 	if !ok {
 		return false

@@ -218,6 +218,12 @@ func runBuild(dockerCli command.Cli, in buildOptions) (err error) {
 			}
 		}
 	}
+	if build.DefaultLoad() && len(outputs) == 0 && len(opts.Tags) > 0 {
+		outputs = []client.ExportEntry{{
+			Type:  "docker",
+			Attrs: map[string]string{},
+		}}
+	}
 	opts.Exports = outputs
 
 	inAttests := append([]string{}, in.attests...)
