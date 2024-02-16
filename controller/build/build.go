@@ -133,6 +133,15 @@ func RunBuild(ctx context.Context, dockerCli command.Cli, in controllerapi.Build
 		}
 	}
 
+	// ENV-guarded ability load images by default if no other output is specified.
+	// This is useful when migrating from Docker buildx drivers to others, as it aligns the default behavior.
+	if build.DefaultLoad() && len(outputs) == 0 && len(opts.Tags) > 0 {
+		outputs = []client.ExportEntry{{
+			Type:  "docker",
+			Attrs: map[string]string{},
+		}}
+	}
+
 	annotations, err := buildflags.ParseAnnotations(in.Annotations)
 	if err != nil {
 		return nil, nil, err
