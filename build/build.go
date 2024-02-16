@@ -1434,6 +1434,18 @@ func noDefaultLoad() bool {
 	return b
 }
 
+func DefaultLoad() bool {
+	v, ok := os.LookupEnv("BUILDX_DEFAULT_LOAD")
+	if !ok {
+		return false
+	}
+	b, err := strconv.ParseBool(v)
+	if err != nil {
+		logrus.Warnf("invalid non-bool value for BUILDX_DEFAULT_LOAD: %s", v)
+	}
+	return b
+}
+
 // handle https://github.com/moby/moby/pull/10858
 func handleLowercaseDockerfile(dir, p string) string {
 	if filepath.Base(p) != "Dockerfile" {
